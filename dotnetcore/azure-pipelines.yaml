@@ -1,0 +1,8 @@
+name: dotnetcore.ci
+
+trigger:
+  branches:
+    include:
+      - dotnetcore-pipeline
+    exclude:
+      - main
