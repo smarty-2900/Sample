@@ -7,42 +7,50 @@ trigger:
     exclude:
       - main
   batch: true
-pool:
-  vmImage: 'windows-latest'
+
 variables:
   buildConfigurations: 'Release'
+  vmImageName: 'windows-latest'
 
-steps:
-- task: UseDotNet@2
-  displayName: 'Install .NET Core SDK'
-  inputs:
-    version: 6.0.x
-    performMultiLevelLookup: true
-    includePreviewVersions: true
-- task: UseDotNet@2
-  displayName: 'set dotnet core version'
-  inputs:
-    version: '6.0.x'
-- task: DotNetCoreCLI@2
-  displayName: 'Build'
-  inputs:
-    command: 'build'
-    projects: '**/*.csproj'
-    arguments: '--configuration $(buildConfigurations)'
-- task: DotNetCoreCLI@2
-  displayName: 'Generate binaries'
-  inputs:
-    command: 'publish'
-    projects: '**/*.csproj'
-    publishWebProjects: False
-    arguments: '--configuration $(buildConfigurations) --output $(Build.ArtifactStagingDirectory)'
-    zipAfterPublish: true
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish'
-  inputs:
-   PathtoPublish: $(Build.ArtifactStagingDirectory)
-   ArtifactName: "mstest"
+pool:
+  vmImage: $(vmImageName) # Use the variable for VM image
+
+stages:
+- stage: BuildAndPublish
+  jobs:
+  - job: Build
+    variables:
+      dotnetVersion: '6.0.x' # Define a job-specific variable
     
-
-
+    steps:
+    - task: UseDotNet@2
+      displayName: 'Install .NET Core SDK'
+      inputs:
+        version: $(dotnetVersion) # Use the job-specific variable
+    
+    - task: DotNetCoreCLI@2
+      displayName: 'Build'
+      inputs:
+        command: 'build'
+        projects: '**/*.csproj'
+        arguments: '--configuration $(buildConfigurations)'
+  
+  - job: Publish
+    dependsOn: Build
+    
+    steps:
+    - task: DotNetCoreCLI@2
+      displayName: 'Generate binaries'
+      inputs:
+        command: 'publish'
+        projects: '**/*.csproj'
+        publishWebProjects: False
+        arguments: '--configuration $(buildConfigurations) --output $(Build.ArtifactStagingDirectory)'
+        zipAfterPublish: true
+    
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish'
+      inputs:
+        PathtoPublish: $(Build.ArtifactStagingDirectory)
+        ArtifactName: "mstest"
 
