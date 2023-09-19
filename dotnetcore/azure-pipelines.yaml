@@ -34,10 +34,11 @@ steps:
   inputs:
     command: 'publish'
     projects: '**/*.csproj'
+    publishWebProjects: False
     arguments: '--configuration $(buildConfigurations) --output $(Build.ArtifactStagingDirectory)'
     zipAfterPublish: true
 - task: PublishBuildArtifacts@1
-  displayName: 'publish'
+  displayName: 'Publish'
   inputs:
    PathtoPublish: $(Build.ArtifactStagingDirectory)
    ArtifactName: "mstest"
