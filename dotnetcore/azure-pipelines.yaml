@@ -3,6 +3,20 @@ name: dotnetcore.ci
 trigger:
   branches:
     include:
-      - dotnetcore-pipeline
+      - dotnet-core-pipeline
     exclude:
       - main
+    batch: true
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  buildConfigurations: 'Release'
+
+steps:
+- task: UseDotNet@2
+  displayName: 'Install .Net core sdk'
+  inputs:
+    version: 3.1.x
+    performMultiLevelLookup: true
