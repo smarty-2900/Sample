@@ -15,11 +15,11 @@ variables:
 pool:
   vmImage: $(vmImageName) # Use the variable for VM image
 
-# parameters:
-#   - name: applicationPath
-#     type: string
-#     default: '**/*.csproj'
-#     displayName: 'Application Path' #Path to the application project file (e.g., **/*.csproj)
+parameters:
+  - name: applicationPath
+    type: string
+    default: '**/*.csproj'
+    displayName: 'Application Path' #Path to the application project file (e.g., **/*.csproj)
 
 stages:
 - stage: BuildAndPublish
@@ -38,7 +38,7 @@ stages:
       displayName: 'Build'
       inputs:
         command: 'build'
-        projects: '**/*.csproj' # Use the applicationPath parameter
+        projects: ${{ parameters.projectsToPublish}} # Use the applicationPath parameter
         arguments: '--configuration $(buildConfigurations)'
   
   - job: Publish
@@ -49,7 +49,7 @@ stages:
       displayName: 'Generate binaries'
       inputs:
         command: 'publish'
-        projects: '**/*.csproj' # Use the applicationPath parameter
+        projects: ${{ parameters.projectsToPublish}} # Use the applicationPath parameter
         publishWebProjects: False
         arguments: '--configuration $(buildConfigurations) --output $(Build.ArtifactStagingDirectory)'
         zipAfterPublish: true
