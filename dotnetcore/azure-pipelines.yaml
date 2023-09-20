@@ -1,51 +1,47 @@
 name: dotnetcore.ci
 
+parameters:
+- name: applicationPath
+  type: string
+  default: '**/*.csproj'
+  displayName: 'Application Path'
+
 trigger:
   branches:
     include:
       - dotnetcore-pipeline
     exclude:
       - main
-  batch: true
 
 variables:
-  buildConfigurations: 'Release'
-  vmImageName: 'windows-latest'
-  dotnetVersion: '6.0.x' # Define .NET SDK version as a variable
+  buildConfiguration: 'Release'
+  dotnetVersion: '6.0.x' # Specify the desired .NET version here
 
 pool:
-  vmImage: $(vmImageName) # Use the variable for VM image
-
-parameters:
-  - name: applicationPath
-    type: string
-    default: '**/*.csproj'
-    displayName: 'Application Path' # Path to the application project file (e.g., **/*.csproj)
+  vmImage: 'windows-latest'
 
 stages:
 - stage: BuildAndPublish
   jobs:
-  - job: Build
+  - job: BuildAndPublishJob
+    displayName: 'Build and Publish'
     steps:
+    - checkout: self
+
+    # Check if the desired .NET version is already cached; if not, install and cache it.
     - task: UseDotNet@2
-      displayName: 'Install .NET SDK'
+      displayName: 'Use .NET SDK'
       inputs:
-        version: $(dotnetVersion) # Use the .NET SDK version variable
+        version: $(dotnetVersion)
+        installationPath: $(Agent.ToolsDirectory)/dotnet
 
     - script: |
-        dotnet build --configuration $(buildConfigurations) --no-restore ${{ parameters.applicationPath }}
+        dotnet --version
+        dotnet build --configuration $(buildConfiguration) --no-restore --project $(applicationPath)
       displayName: 'Build'
-  
-  - job: Publish
-    dependsOn: Build
     
-    steps:
-    - script: |
-        dotnet publish --configuration $(buildConfigurations) --no-build --output $(Build.ArtifactStagingDirectory) ${{ parameters.applicationPath }}
-      displayName: 'Generate Binaries'
-    
-    - task: PublishBuildArtifacts@1
-      displayName: 'Publish'
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publish Artifact'
       inputs:
-        PathtoPublish: $(Build.ArtifactStagingDirectory)
-        ArtifactName: "mstest"
+        targetPath: '**/bin/$(buildConfiguration)/**'
+        artifact: 'drop'
