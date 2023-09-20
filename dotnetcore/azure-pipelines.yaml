@@ -36,7 +36,7 @@ stages:
         installationPath: $(Agent.ToolsDirectory)/dotnet
     - script: |
         dotnet --version
-        dotnet restore   # Restore project dependencies (optional, remove if not needed)
+        dotnet restore
         dotnet build --configuration $(buildConfiguration) --no-restore --project ${{parameters.applicationPath}}
       displayName: 'Build'
     
