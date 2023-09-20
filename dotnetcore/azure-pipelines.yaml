@@ -34,13 +34,14 @@ stages:
       inputs:
         version: $(dotnetVersion)
         installationPath: $(Agent.ToolsDirectory)/dotnet
-
     - script: |
         dotnet --version
+        dotnet restore   # Restore project dependencies (optional, remove if not needed)
+        dotnet build --configuration $(buildConfiguration) --no-restore --project $(applicationPath)
       displayName: 'Build'
     
     - task: PublishPipelineArtifact@1
       displayName: 'Publish Artifact'
       inputs:
-        targetPath: '**/bin/$(buildConfiguration)/**'
+        targetPath: '$(Build.ArtifactStagingDirectory)'
         artifact: 'drop'
