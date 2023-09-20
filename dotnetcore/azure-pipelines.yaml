@@ -37,7 +37,7 @@ stages:
     - script: |
         dotnet --version
         dotnet restore   # Restore project dependencies (optional, remove if not needed)
-        dotnet build --configuration $(buildConfiguration) --no-restore --project $(applicationPath)
+        dotnet build --configuration $(buildConfiguration) --no-restore --project ${{parameters.applicationPath}}
       displayName: 'Build'
     
     - task: PublishPipelineArtifact@1
