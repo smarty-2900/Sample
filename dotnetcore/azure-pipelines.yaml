@@ -37,7 +37,6 @@ stages:
 
     - script: |
         dotnet --version
-        # dotnet build --configuration $(buildConfiguration) --no-restore --project $(applicationPath)
       displayName: 'Build'
     
     - task: PublishPipelineArtifact@1
