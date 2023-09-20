@@ -36,8 +36,9 @@ stages:
         installationPath: $(Agent.ToolsDirectory)/dotnet
     - script: |
         dotnet --version
-        dotnet restore
-        dotnet build --configuration $(buildConfiguration) --no-restore --project ${{parameters.applicationPath}}
+        pwd 
+        echo "Build Configuration: $(buildConfiguration)"
+        echo "Application Path: ${{parameters.applicationPath}}"  
       displayName: 'Build'
     
     - task: PublishPipelineArtifact@1
