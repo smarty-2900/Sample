@@ -19,8 +19,7 @@ parameters:
   - name: applicationPath
     type: string
     default: '**/*.csproj'
-    displayName: 'Application Path'
-    description: 'Path to the application project file (e.g., **/*.csproj)'
+    displayName: 'Application Path' #Path to the application project file (e.g., **/*.csproj)
 
 stages:
 - stage: BuildAndPublish
