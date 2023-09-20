@@ -39,7 +39,7 @@ stages:
         pwd 
         echo "Build Configuration: $(buildConfiguration)"
         echo "Application Path: ${{parameters.applicationPath}}"
-        dotnet build --configuration $(buildConfiguration) --no-restore --project ${{parameters.applicationPath}}
+        dotnet build $(Build.SourcesDirectory)/${{ parameters.applicationPath}} --configuration $(buildConfiguration)
       displayName: 'Build'
     
     - task: PublishPipelineArtifact@1
