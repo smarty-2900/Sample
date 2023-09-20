@@ -36,7 +36,8 @@ stages:
         installationPath: $(Agent.ToolsDirectory)/dotnet
     - script: |
         dotnet --version
-        pwd 
+        pwd
+        cd Sample/dotnetcore
         echo "Build Configuration: $(buildConfiguration)"
         echo "Application Path: ${{parameters.applicationPath}}"
         dotnet build $(Build.SourcesDirectory)/${{ parameters.applicationPath}} --configuration $(buildConfiguration)
