@@ -11,6 +11,7 @@ trigger:
 variables:
   buildConfigurations: 'Release'
   vmImageName: 'windows-latest'
+  dotnetVersion: '6.0.x' # Define .NET SDK version as a variable
 
 pool:
   vmImage: $(vmImageName) # Use the variable for VM image
@@ -19,40 +20,29 @@ parameters:
   - name: applicationPath
     type: string
     default: '**/*.csproj'
-    displayName: 'Application Path' #Path to the application project file (e.g., **/*.csproj)
+    displayName: 'Application Path' # Path to the application project file (e.g., **/*.csproj)
 
 stages:
 - stage: BuildAndPublish
   jobs:
   - job: Build
-    variables:
-      dotnetVersion: '6.0.x' # Define a job-specific variable
-    
     steps:
     - task: UseDotNet@2
-      displayName: 'Install .NET Core SDK'
+      displayName: 'Install .NET SDK'
       inputs:
-        version: $(dotnetVersion) # Use the job-specific variable
-    
-    - task: DotNetCoreCLI@2
+        version: $(dotnetVersion) # Use the .NET SDK version variable
+
+    - script: |
+        dotnet build --configuration $(buildConfigurations) --no-restore ${{ parameters.applicationPath }}
       displayName: 'Build'
-      inputs:
-        command: 'build'
-        projects: ${{ parameters.applicationPath}} # Use the applicationPath parameter
-        arguments: '--configuration $(buildConfigurations)'
   
   - job: Publish
     dependsOn: Build
     
     steps:
-    - task: DotNetCoreCLI@2
-      displayName: 'Generate binaries'
-      inputs:
-        command: 'publish'
-        projects: ${{ parameters.applicationPath}} # Use the applicationPath parameter
-        publishWebProjects: False
-        arguments: '--configuration $(buildConfigurations) --output $(Build.ArtifactStagingDirectory)'
-        zipAfterPublish: true
+    - script: |
+        dotnet publish --configuration $(buildConfigurations) --no-build --output $(Build.ArtifactStagingDirectory) ${{ parameters.applicationPath }}
+      displayName: 'Generate Binaries'
     
     - task: PublishBuildArtifacts@1
       displayName: 'Publish'
