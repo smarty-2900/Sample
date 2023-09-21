@@ -11,7 +11,7 @@ steps:
   displayName: 'Install Node.js'
 
 - script: |
-    npm install
+    pwd
   displayName: 'npm install'
 
 - script: |
