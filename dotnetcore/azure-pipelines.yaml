@@ -36,11 +36,8 @@ stages:
         installationPath: $(Agent.ToolsDirectory)/dotnet
     - script: |
         dotnet --version
-        pwd
-        cd Sample/dotnetcore
-        echo "Build Configuration: $(buildConfiguration)"
         echo "Application Path: ${{parameters.applicationPath}}"
-        dotnet build $(Build.SourcesDirectory)/${{ parameters.applicationPath}} --configuration $(buildConfiguration)
+        dotnet build --projects ${{ parameters.applicationPath}} --configuration $(buildConfiguration)
       displayName: 'Build'
     
     - task: PublishPipelineArtifact@1
