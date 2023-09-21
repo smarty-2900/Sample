@@ -1,3 +1,8 @@
+parameters:
+- name: applicationPath
+  type: string
+  default: 'nodejs' # Default value for the application path
+
 trigger:
 - nodejs
 
@@ -11,18 +16,16 @@ steps:
   displayName: 'Install Node.js'
 
 - script: |
-    pwd
-    ls
-    cd nodejs
+    cd $(applicationPath)
     npm install
     npm run build
   displayName: 'npm install'
+
 - task: CopyFiles@2
   inputs:
     sourceFolder: '$(Build.SourcesDirectory)'
     contents: |
-       nodejs/src/*
-       nodejs/public/*
+       $(applicationPath)/src/*
     targetFolder: '$(Build.ArtifactStagingDirectory)'
   displayName: 'Copy project files'
 
@@ -32,4 +35,3 @@ steps:
     targetPath: '$(Build.ArtifactStagingDirectory)'
     publishLocation: pipeline
     displayName: 'Publish npm artifact'
-
