@@ -21,9 +21,8 @@ steps:
   inputs:
     sourceFolder: '$(Build.SourcesDirectory)'
     contents: |
-       cd nodejs
-       src/*
-       public/*
+       nodejs/src/*
+       nodejs/public/*
     targetFolder: '$(Build.ArtifactStagingDirectory)'
   displayName: 'Copy project files'
 
