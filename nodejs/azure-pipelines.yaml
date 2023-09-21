@@ -21,6 +21,7 @@ steps:
   inputs:
     sourceFolder: '$(Build.SourcesDirectory)'
     contents: |
+       cd nodejs
        src/*
        public/*
     targetFolder: '$(Build.ArtifactStagingDirectory)'
@@ -30,5 +31,5 @@ steps:
   inputs:
     artifactName: drop
     targetPath: '$(Build.ArtifactStagingDirectory)'
-  displayName: 'Publish npm artifact'
+    displayName: 'Publish npm artifact'
 
