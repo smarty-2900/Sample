@@ -3,7 +3,7 @@ name: dotnetcore.ci
 trigger:
   branches:
     include:
-      - dotnetcore-pipeline
+      - dotnetcore-pipeline 
     exclude:
       - main
   batch: true
@@ -55,4 +55,4 @@ stages:
       displayName: 'Publish'
       inputs:
         PathtoPublish: $(Build.ArtifactStagingDirectory)
-        ArtifactName: "mstest"
+        ArtifactName: "drop"
