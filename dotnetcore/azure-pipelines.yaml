@@ -15,6 +15,12 @@ variables:
 pool:
   vmImage: $(vmImageName) # Use the variable for VM image
 
+parameters:
+  - name: applicationPath
+    type: string
+    default: '**/*.csproj'
+    displayName: 'Application Path' #Path to the application project file (e.g., **/*.csproj)
+
 stages:
 - stage: BuildAndPublish
   jobs:
@@ -29,19 +35,21 @@ stages:
         version: $(dotnetVersion)
         installationPath: $(Agent.ToolsDirectory)/dotnet
     
-    - script: |
-        find . -type f -name '*.csproj' | while read csproj; do
-          echo "Building project $csproj"
-          dotnet build "$csproj" --configuration $(buildConfigurations)
-        done
+    - task: DotNetCoreCLI@2
       displayName: 'Build'
-    
-    - script: |
-        find . -type f -name '*.csproj' | while read csproj; do
-          echo "Publishing project $csproj"
-          dotnet publish "$csproj" --configuration $(buildConfigurations) --output $(Build.ArtifactStagingDirectory)
-        done
-      displayName: 'Publish'
+      inputs:
+        command: 'build'
+        projects: ${{ parameters.applicationPath}} # Use the applicationPath parameter
+        arguments: '--configuration $(buildConfigurations)'
+  
+    - task: DotNetCoreCLI@2
+      displayName: 'Generate binaries'
+      inputs:
+        command: 'publish'
+        projects: ${{ parameters.applicationPath}} # Use the applicationPath parameter
+        publishWebProjects: False
+        arguments: '--configuration $(buildConfigurations) --output $(Build.ArtifactStagingDirectory)'
+        zipAfterPublish: true
     
     - task: PublishBuildArtifacts@1
       displayName: 'Publish'
