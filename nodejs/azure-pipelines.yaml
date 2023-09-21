@@ -12,6 +12,7 @@ steps:
 
 - script: |
     pwd
+    ls
   displayName: 'npm install'
 
 - script: |
