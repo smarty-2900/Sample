@@ -1,45 +1,61 @@
 name: dotnetcore.ci
 
-parameters:
-- name: applicationPath
-  type: string
-  default: ' dotnetcore.csproj'
-  displayName: 'Application Path'
-
 trigger:
   branches:
     include:
       - dotnetcore-pipeline
     exclude:
       - main
+  batch: true
 
 variables:
-  buildConfiguration: 'Release'
-  dotnetVersion: '6.0.x' # Specify the desired .NET version here
+  buildConfigurations: 'Release'
+  vmImageName: 'windows-latest'
 
 pool:
-  vmImage: 'windows-latest'
+  vmImage: $(vmImageName) # Use the variable for VM image
+
+parameters:
+  - name: applicationPath
+    type: string
+    default: '**/*.csproj'
+    displayName: 'Application Path' #Path to the application project file (e.g., **/*.csproj)
 
 stages:
 - stage: BuildAndPublish
   jobs:
-  - job: BuildAndPublishJob
-    displayName: 'Build and Publish'
-    steps:
-    # Check if the desired .NET version is already cached; if not, install and cache it.
-    - task: UseDotNet@2
-      displayName: 'Use .NET SDK'
-      inputs:
-        version: $(dotnetVersion)
-        installationPath: $(Agent.ToolsDirectory)/dotnet
-    - script: |
-        dotnet --version
-        echo "Application Path: ${{parameters.applicationPath}}"
-        dotnet build --configuration $(buildConfiguration) "${{ parameters.applicationPath}}"
-      displayName: 'Build'
+  - job: Build
+    variables:
+      dotnetVersion: '6.0.x' # Define a job-specific variable
     
-    - task: PublishPipelineArtifact@1
-      displayName: 'Publish Artifact'
+    steps:
+    - task: UseDotNet@2
+      displayName: 'Install .NET Core SDK'
       inputs:
-        targetPath: '$(Build.ArtifactStagingDirectory)'
-        artifact: 'drop'
+        version: $(dotnetVersion) # Use the job-specific variable
+    
+    - task: DotNetCoreCLI@2
+      displayName: 'Build'
+      inputs:
+        command: 'build'
+        projects: ${{ parameters.applicationPath}} # Use the applicationPath parameter
+        arguments: '--configuration $(buildConfigurations)'
+  
+  - job: Publish
+    dependsOn: Build
+    
+    steps:
+    - task: DotNetCoreCLI@2
+      displayName: 'Generate binaries'
+      inputs:
+        command: 'publish'
+        projects: ${{ parameters.applicationPath}} # Use the applicationPath parameter
+        publishWebProjects: False
+        arguments: '--configuration $(buildConfigurations) --output $(Build.ArtifactStagingDirectory)'
+        zipAfterPublish: true
+    
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish'
+      inputs:
+        PathtoPublish: $(Build.ArtifactStagingDirectory)
+        ArtifactName: "mstest"
