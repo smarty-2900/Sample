@@ -37,7 +37,7 @@ stages:
     - script: |
         dotnet --version
         echo "Application Path: ${{parameters.applicationPath}}"
-        dotnet build --projects ${{ parameters.applicationPath}} --configuration $(buildConfiguration)
+        dotnet build --configuration $(buildConfiguration) "${{ parameters.applicationPath}}"
       displayName: 'Build'
     
     - task: PublishPipelineArtifact@1
