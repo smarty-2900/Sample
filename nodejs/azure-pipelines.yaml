@@ -16,7 +16,7 @@ steps:
   displayName: 'Install Node.js'
 
 - script: |
-    cd $(applicationPath)
+    cd ${{parameters.applicationPath}}
     npm install
     npm run build
   displayName: 'npm install'
@@ -25,7 +25,7 @@ steps:
   inputs:
     sourceFolder: '$(Build.SourcesDirectory)'
     contents: |
-       $(applicationPath)/src/*
+       ${{parameters.applicationPath}}/src/*
     targetFolder: '$(Build.ArtifactStagingDirectory)'
   displayName: 'Copy project files'
 
