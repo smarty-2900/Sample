@@ -32,7 +32,8 @@ stages:
     - task: UseDotNet@2
       displayName: 'Install .NET Core SDK'
       inputs:
-        version: $(dotnetVersion) # Use the job-specific variable
+        version: $(dotnetVersion)
+        installationPath: $(Agent.ToolsDirectory)/dotnet
     
     - task: DotNetCoreCLI@2
       displayName: 'Build'
@@ -41,10 +42,6 @@ stages:
         projects: ${{ parameters.applicationPath}} # Use the applicationPath parameter
         arguments: '--configuration $(buildConfigurations)'
   
-  - job: Publish
-    dependsOn: Build
-    
-    steps:
     - task: DotNetCoreCLI@2
       displayName: 'Generate binaries'
       inputs:
