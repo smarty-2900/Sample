@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f8baed8d-8cca-4cbe-b323-1272e9a27a08">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT
+     hometable.`ID` AS hometable_ID,
+     hometable.`Name` AS hometable_Name,
+     hometable.`Date` AS hometable_Date,
+     hometable.`Checkbox` AS hometable_Checkbox,
+     hometable.`Gender` AS hometable_Gender
+FROM
+     `hometable` hometable]]>
+	</queryString>
+	<field name="hometable_ID" class="java.lang.Integer"/>
+	<field name="hometable_Name" class="java.lang.String"/>
+	<field name="hometable_Date" class="java.sql.Date"/>
+	<field name="hometable_Checkbox" class="java.lang.String"/>
+	<field name="hometable_Gender" class="java.lang.String"/>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="72">
+			<frame>
+				<reportElement mode="Opaque" x="-20" y="-20" width="595" height="92" backcolor="#006699" uuid="3e9593e5-30b0-4c63-a070-26658e2b388a"/>
+				<staticText>
+					<reportElement x="20" y="20" width="234" height="43" forecolor="#FFFFFF" uuid="2c4692ab-c613-4906-b92a-f3e3b76fc335"/>
+					<textElement>
+						<font size="34" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Details]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="20" y="63" width="202" height="20" forecolor="#FFFFFF" uuid="cdeaabb3-f953-4fef-b2b0-34d1e69aeeb9"/>
+					<textElement textAlignment="Left">
+						<font size="14" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Sample details from database]]></text>
+				</staticText>
+				<textField pattern="yyyy/MM/dd">
+					<reportElement x="475" y="43" width="100" height="20" forecolor="#FFFFFF" uuid="72d30212-ab90-4c58-8461-908764a67008"/>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+				<textField pattern="h.mm a">
+					<reportElement x="475" y="63" width="100" height="20" forecolor="#FFFFFF" uuid="b021db96-05f2-4c7b-960d-2536c565912d"/>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="13"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="21">
+			<line>
+				<reportElement x="-20" y="20" width="595" height="1" forecolor="#666666" uuid="91ccc121-2678-4412-9270-1bd69b64d71b"/>
+			</line>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="89" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="d3309d0e-f054-44b7-95cb-bce19f8d570f"/>
+				<textElement textAlignment="Left">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="89" y="0" width="113" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="b0823d27-ad39-4e4f-9f63-d9641ca00728"/>
+				<textElement textAlignment="Left">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="202" y="0" width="131" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="817eba83-4edc-49e7-a35e-87da28d62389"/>
+				<textElement textAlignment="Left">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="333" y="0" width="111" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="9b290568-70e6-4bb0-b87b-61754da0ae1d"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Checkbox]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="444" y="0" width="111" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="13c7113a-2c0c-4ec6-888b-cabc416eb25b"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Gender]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="19" width="555" height="1" uuid="1221cff5-4b4d-4842-9934-c4824875b3e4"/>
+			</line>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="0" width="89" height="20" uuid="8a19509b-55e3-402c-bce8-9a5f141d50d3"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{hometable_ID}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="89" y="0" width="113" height="20" uuid="3cf45532-c419-40ec-9966-f6aff4077da5"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{hometable_Name}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="202" y="0" width="131" height="20" uuid="d1681e5e-ee46-4533-b23e-b47cc358a283"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{hometable_Date}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="356" y="0" width="88" height="20" uuid="188f2354-bbdb-4fb6-8a86-85575687e366"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{hometable_Checkbox}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="475" y="0" width="80" height="20" uuid="2ef1202b-098e-44b7-9117-94ac3e0a6be8"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{hometable_Gender}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="17">
+			<textField>
+				<reportElement mode="Opaque" x="0" y="4" width="515" height="13" backcolor="#E6E6E6" uuid="19175696-f0a4-40a6-ad90-f584ec1a7054"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement mode="Opaque" x="515" y="4" width="40" height="13" backcolor="#E6E6E6" uuid="c6f4a929-8c04-469f-8bf7-bae9a06649fe"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="0" y="4" width="100" height="13" uuid="1d9eb280-0886-446a-9f02-bcca396a320d"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>
