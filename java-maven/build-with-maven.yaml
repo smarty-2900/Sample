@@ -1,0 +1,51 @@
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+- stage: BuildWithAnt
+  jobs:
+  - job: AntBuild
+    displayName: 'Build with Ant'
+    steps:
+    - script: |
+        cd pipelines-java  # Navigate to the directory containing your build.xml for Ant
+        ant build  # Replace 'build' with your Ant target
+      displayName: 'Ant Build'
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: 'pipelines-java/build'  # Adjust the path to your Ant build output
+        ArtifactName: 'ant-build'
+        publishLocation: 'Container'
+
+- stage: BuildWithMaven
+  jobs:
+  - job: MavenBuild
+    displayName: 'Build with Maven'
+    steps:
+    - script: |
+        cd pipelines-java  # Navigate to the directory containing your pom.xml for Maven
+        mvn clean package
+      displayName: 'Maven Build'
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: 'pipelines-java/target'  # Adjust the path to your Maven build output
+        ArtifactName: 'maven-build'
+        publishLocation: 'Container'
+
+- stage: BuildWithGradle
+  jobs:
+  - job: GradleBuild
+    displayName: 'Build with Gradle'
+    steps:
+    - script: |
+        cd pipelines-java  # Navigate to the directory containing your build.gradle for Gradle
+        gradle build  # Replace 'build' with your Gradle task
+      displayName: 'Gradle Build'
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: 'pipelines-java/build'  # Adjust the path to your Gradle build output
+        ArtifactName: 'gradle-build'
+        publishLocation: 'Container'
