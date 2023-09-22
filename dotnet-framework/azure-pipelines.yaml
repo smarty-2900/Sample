@@ -19,6 +19,7 @@ jobs:
     displayName: 'Install .NET Framework 4.x'
 
   - script: |
+      ls
       cd dotnet-framework
       dotnet restore $(solution)
     displayName: 'Restore NuGet Packages'
