@@ -17,7 +17,7 @@ stages:
       displayName: 'Maven Build'
     - task: PublishBuildArtifacts@1
       inputs:
-        PathtoPublish: 'pipelines/java/target'  # Adjust the path to your Maven build output
+        PathtoPublish: 'java-maven/target'  # Adjust the path to your Maven build output
         ArtifactName: 'maven-build'
         publishLocation: 'Container'
 
