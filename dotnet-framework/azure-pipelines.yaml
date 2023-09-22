@@ -3,7 +3,7 @@ name: dotnetcore.ci
 trigger:
   branches:
     include:
-      - dotnetcore-pipeline 
+      - dotnet-framework 
     exclude:
       - main
   batch: true
