@@ -18,10 +18,14 @@ jobs:
       installationPath: $(Agent.ToolsDirectory)/dotnet
     displayName: 'Install .NET Framework 4.x'
 
-  - script: dotnet restore $(solution)
+  - script: |
+      cd dotnet-framework
+      dotnet restore $(solution)
     displayName: 'Restore NuGet Packages'
 
-  - script: dotnet build $(solution) --configuration $(buildConfiguration)
+  - script: |
+      cd dotnet-framework
+      dotnet build $(solution) --configuration $(buildConfiguration)
     displayName: 'Build the project'
 
   - task: PublishBuildArtifacts@1
