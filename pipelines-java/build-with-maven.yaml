@@ -12,3 +12,9 @@ steps:
     publishJUnitResults: true
     testResultsFiles: '**/TEST-*.xml'
     goals: 'package'
+
+# Add a step to publish build artifacts
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathtoPublish: 'pipelines-java/maven' # Replace with the actual path to your artifacts
+    artifactName: 'maven' # Replace with a meaningful name for your artifacts
