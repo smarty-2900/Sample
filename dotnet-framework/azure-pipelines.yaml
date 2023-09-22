@@ -1,0 +1,33 @@
+trigger:
+- '*'
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '**/*.sln'
+  buildConfiguration: 'Release'
+
+jobs:
+- job: Build
+  displayName: 'Build'
+  steps:
+  - task: UseDotNet@2
+    inputs:
+      packageType: runtime
+      version: '4.x'
+      installationPath: $(Agent.ToolsDirectory)/dotnet
+    displayName: 'Install .NET Framework 4.x'
+
+  - script: dotnet restore $(solution)
+    displayName: 'Restore NuGet Packages'
+
+  - script: dotnet build $(solution) --configuration $(buildConfiguration)
+    displayName: 'Build the project'
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathtoPublish: '$(Build.SourcesDirectory)/dnfw' # Update the path as per your project structure
+      artifactName: 'drop'
+      publishLocation: 'Container'
+    displayName: 'Publish Artifact'
