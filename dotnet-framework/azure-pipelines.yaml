@@ -14,7 +14,7 @@ jobs:
   steps:
   - task: UseDotNet@2
     inputs:
-      packageType: runtime
+      packageType: sdk
       version: '4.x'
       installationPath: $(Agent.ToolsDirectory)/dotnet
     displayName: 'Install .NET Framework 4.x'
