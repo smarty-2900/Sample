@@ -18,10 +18,7 @@ jobs:
       installationPath: $(Agent.ToolsDirectory)/dotnet
     displayName: 'Install .NET Framework 4.x'
 
-  - script: |
-      ls
-      cd dotnet-framework
-      dotnet restore $(solution)
+  - script: 'ls'
     displayName: 'Restore NuGet Packages'
 
   - script: |
