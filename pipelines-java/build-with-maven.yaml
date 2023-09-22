@@ -1,29 +1,21 @@
+trigger:
+- master  # You can specify the branch to trigger the pipeline
+
 pool:
-  vmImage: 'ubuntu-latest' # other options: 'macOS-latest', 'windows-latest'
+  vmImage: 'ubuntu-latest'  # You can choose an appropriate agent image
 
 steps:
-- task: Maven@4
+- task: UseJavaVersion@0
   inputs:
-    mavenPomFile: 'pipelines-java/pom.xml'
-    mavenOptions: '-Xmx3072m'
-    javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.8'
-    jdkArchitectureOption: 'x64'
-    publishJUnitResults: true
-    testResultsFiles: '**/TEST-*.xml'
-    goals: 'package'
+    versionSpec: '11'  # Use the Java version you need
 
-# Add a step to copy files to a staging directory
-- task: CopyFiles@2
-  displayName: 'Copy build artifacts'
-  inputs:
-    SourceFolder: 'pipelines-java/' # Replace with the source folder containing your artifacts
-    Contents: '**' # Specify the files or patterns you want to copy
-    TargetFolder: '$(Build.ArtifactStagingDirectory)/maven' # Define the target directory in the staging location
+- script: |
+    cd pipelines-java  # Navigate to the directory containing your pom.xml
+    mvn clean package
+  displayName: 'Maven Build'
 
-# Add a step to publish build artifacts
 - task: PublishBuildArtifacts@1
-  displayName: 'Publish build artifacts'
   inputs:
-    pathtoPublish: '$(Build.ArtifactStagingDirectory)/maven'
-    artifactName: 'my-artifacts' # Replace with a meaningful name for your artifacts
+    PathtoPublish: 'pipelines-java/target'  # Adjust the path to your built JAR/WAR file
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
