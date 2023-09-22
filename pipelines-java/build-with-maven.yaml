@@ -13,8 +13,17 @@ steps:
     testResultsFiles: '**/TEST-*.xml'
     goals: 'package'
 
+# Add a step to copy files to a staging directory
+- task: CopyFiles@2
+  displayName: 'Copy build artifacts'
+  inputs:
+    SourceFolder: 'pipelines-java/' # Replace with the source folder containing your artifacts
+    Contents: '**' # Specify the files or patterns you want to copy
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/maven' # Define the target directory in the staging location
+
 # Add a step to publish build artifacts
 - task: PublishBuildArtifacts@1
+  displayName: 'Publish build artifacts'
   inputs:
-    pathtoPublish: 'pipelines-java/maven' # Replace with the actual path to your artifacts
-    artifactName: 'maven' # Replace with a meaningful name for your artifacts
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/maven'
+    artifactName: 'my-artifacts' # Replace with a meaningful name for your artifacts
