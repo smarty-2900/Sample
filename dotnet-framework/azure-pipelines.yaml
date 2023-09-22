@@ -1,58 +1,40 @@
-name: dotnetcore.ci
+# ASP.NET
+# Build and test ASP.NET projects.
+# Add steps that publish symbols, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
 
 trigger:
-  branches:
-    include:
-      - dotnet-framework 
-    exclude:
-      - main
-  batch: true
-
-variables:
-  buildConfigurations: 'Release'
-  vmImageName: 'windows-latest'
+- master
 
 pool:
-  vmImage: $(vmImageName) # Use the variable for VM image
+  vmImage: 'VS2017-Win2016'
 
-parameters:
-  - name: solutionPath
-    type: string
-    default: '**/*.sln'
-    displayName: 'Solution Path' #Path to the application project file (e.g., **/*.sln)
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
 
-stages:
-- stage: BuildAndPublish
-  jobs:
-  - job: Build
-    variables:
-      dotnetVersion: '3.0.x' # Define a job-specific variable
-    
-    steps:
-    - task: UseDotNet@2
-      displayName: 'Install .NET Core SDK'
-      inputs:
-        version: $(dotnetVersion)
-        installationPath: $(Agent.ToolsDirectory)/dotnet
-    
-    - task: DotNetCoreCLI@2
-      displayName: 'Build'
-      inputs:
-        command: 'build'
-        projects: ${{ parameters.solutionPath}} # Use the applicationPath parameter
-        arguments: '--configuration $(buildConfigurations)'
-  
-    - task: DotNetCoreCLI@2
-      displayName: 'Generate binaries'
-      inputs:
-        command: 'publish'
-        projects: ${{ parameters.solutionPath}} # Use the applicationPath parameter
-        publishWebProjects: False
-        arguments: '--configuration $(buildConfigurations) --output $(Build.ArtifactStagingDirectory)'
-        zipAfterPublish: true
-    
-    - task: PublishBuildArtifacts@1
-      displayName: 'Publish'
-      inputs:
-        PathtoPublish: $(Build.ArtifactStagingDirectory)
-        ArtifactName: "drop"
+steps:
+- task: NuGetToolInstaller@0
+
+- task: NuGetCommand@2
+  inputs:
+    restoreSolution: '$(solution)'
+
+- task: VSBuild@1
+  inputs:
+    solution: '$(solution)'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+- task: VSTest@2
+  inputs:
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish artifacts'
+  inputs:
+    PathtoPublish: $(build.artifactstagingdirectory)
+    ArtifactName: 'PublishBuildArtifacts'
