@@ -26,7 +26,7 @@ stages:
   jobs:
   - job: Build
     variables:
-      dotnetVersion: '4.0.x' # Define a job-specific variable
+      dotnetVersion: '3.0.x' # Define a job-specific variable
     
     steps:
     - task: UseDotNet@2
