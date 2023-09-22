@@ -4,7 +4,7 @@ pool:
 steps:
 - task: Maven@4
   inputs:
-    mavenPomFile: 'java/pom.xml'
+    mavenPomFile: 'pipelines-java/pom.xml'
     mavenOptions: '-Xmx3072m'
     javaHomeOption: 'JDKVersion'
     jdkVersionOption: '1.8'
