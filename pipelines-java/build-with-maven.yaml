@@ -5,10 +5,6 @@ pool:
   vmImage: 'ubuntu-latest'  # You can choose an appropriate agent image
 
 steps:
-- task: UseJavaVersion@0
-  inputs:
-    versionSpec: '11'  # Use the Java version you need
-
 - script: |
     cd pipelines-java  # Navigate to the directory containing your pom.xml
     mvn clean package
