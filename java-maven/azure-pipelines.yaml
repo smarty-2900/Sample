@@ -12,7 +12,7 @@ stages:
     displayName: 'Build with Maven'
     steps:
     - script: |
-        cd pipelines/java  # Navigate to the directory containing your pom.xml for Maven
+        cd java-maven  # Navigate to the directory containing your pom.xml for Maven
         mvn clean package
       displayName: 'Maven Build'
     - task: PublishBuildArtifacts@1
