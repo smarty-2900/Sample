@@ -13,5 +13,5 @@ steps:
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifacts'
   inputs:
-    PathtoPublish: 'python/artifacts'  # Specify the path to your build artifacts
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'  # Specify the path to your build artifacts
     ArtifactName: 'flask-app'  # Choose a name for the published artifact
