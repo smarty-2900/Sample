@@ -1,0 +1,22 @@
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+- stage: BuildWithGradle
+  jobs:
+  - job: GradleBuild
+    displayName: 'Build with Gradle'
+    steps:
+    - script: |
+        cd java-gradle  # Navigate to the directory containing your build.gradle for Gradle
+        gradle build  # Replace 'build' with your Gradle task
+      displayName: 'Gradle Build'
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: 'java-gradle/build'  # Adjust the path to your Gradle build output
+        ArtifactName: 'gradle-build'
+        publishLocation: 'Container'
+
