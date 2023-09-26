@@ -7,13 +7,8 @@ steps:
     python -m venv venv
     source venv/bin/activate
     pip install -r requirements.txt
-  displayName: 'Install Python Dependencies'
-
-- script: |
-    cd python
-    # Build your Flask application (e.g., create database tables, compile assets)
     python app.py
-  displayName: 'Build Flask Application'
+  displayName: 'Install Python Dependencies'
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifacts'
